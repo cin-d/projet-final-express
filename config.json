@@ -1,0 +1,8 @@
+{
+    "port": 80,
+    "basePath": "/api",
+    "mysqlHost": "localhost",
+    "mysqlUsername": "root",
+    "mysqlPassword": "",
+    "mysqlDatabase": "projet_final"
+}
