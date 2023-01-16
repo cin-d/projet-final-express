@@ -16,6 +16,15 @@ const getById = async (id) => {
     return actuanime[0];
 };
 
+const getLastAnimes = async (length) => {
+    const [response, err] = await db.query("SELECT * FROM articles ORDER BY id DESC LIMIT 3");
+    const lastAnimes = [];
+    for (let lastAnime of response) {
+        lastAnimes.push(lastAnime);
+    }
+    return lastAnimes;
+};
+
 const add = async (data) => {
     const [req, err] = await db.query("INSERT INTO articles (titre, img, texte) VALUES (?,?,?)", 
     [data.titre, data.img, data.texte]);
@@ -57,6 +66,7 @@ const remove = async (id) => {
 module.exports = {
     getAll,
     getById,
+    getLastAnimes,
     add,
     update,
     remove

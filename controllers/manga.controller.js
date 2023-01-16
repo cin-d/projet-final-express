@@ -15,8 +15,8 @@ const getById = async (id) => {
 };
 
 const add = async (data) => {
-    const [req, err] = await db.query("INSERT INTO manga (titre, auteur, annee, synopsis, is_coup_coeur, img) VALUES (?,?,?,?,?,?)", 
-    [data.titre, data.auteur, data.annee, data.synopsis, data.is_coup_coeur, data.img]);
+    const [req, err] = await db.query("INSERT INTO manga (titre, auteur, annee, synopsis, img) VALUES (?,?,?,?,?)", 
+    [data.titre, data.auteur, data.annee, data.synopsis, data.img]);
     if (!req) {
         return null;
     }
@@ -28,13 +28,12 @@ const update = async (id, data) => {
     if (!manga) {
         return null;
     } else {
-        const [req, err] = await db.query("UPDATE manga SET titre = ?, auteur = ?, annee = ?, synopsis = ?, is_coup_coeur = ?, img = ? WHERE id = ? LIMIT 1", 
+        const [req, err] = await db.query("UPDATE manga SET titre = ?, auteur = ?, annee = ?, synopsis = ?, img = ? WHERE id = ? LIMIT 1", 
         [
             data.titre || manga.titre, 
             data.auteur || manga.auteur,
             data.annee || manga.annee,
             data.synopsis || manga.synopsis,
-            data.is_coup_coeur || manga.is_coup_coeur,
             data.img || manga.img,
             id
         ]);

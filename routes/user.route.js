@@ -15,7 +15,7 @@ router.route('/')
         // sinon, je renvoie une 200 avec les données.
         res.status(200).json(users);
     })
-    .put(async (req, res) => {
+    .post(async (req, res) => {
         const new_user = await userController.add(req.body);
 
         if (!new_user) {

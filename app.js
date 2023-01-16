@@ -13,6 +13,6 @@ app.use(express.json());
 app.use(config.basePath, routes);
 
 
-app.listen(80, () => {
+app.listen(config.port, () => {
     console.log('coucou');
 });

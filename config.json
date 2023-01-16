@@ -4,5 +4,7 @@
     "mysqlHost": "localhost",
     "mysqlUsername": "root",
     "mysqlPassword": "",
-    "mysqlDatabase": "projet_final"
+    "mysqlDatabase": "projet_final",
+    "jwtPass" : "cestunsupermotdepassetropcomplique",
+    "jwtExpireLength" : "2 hours"
 }

@@ -1,4 +1,5 @@
 const db = require('../utils/db');
+const bcrypt = require('bcrypt');
 
 // Je créé des fonctions async qui appelle la base de données, et renvoie les données.
 const getAll = async () => {
@@ -16,14 +17,51 @@ const getById = async (id) => {
     return user[0];
 };
 
+const getByEmail = async (data) => {
+    const [user, err] = await db.query("SELECT * FROM user WHERE email = ? LIMIT 1", [data.email]);
+    if (!user || user.length == 0) {
+        return null;
+    }
+    return user[0];
+};
+
+const getByEmailAndPassword = async (data) => {
+
+    const user = await getByEmail(data);
+    if (!user) {
+        return null
+    };
+
+    const hashedPassword = await bcrypt.compare(data.password, user.password);
+    if (hashedPassword) {
+        return user; 
+    } else {
+        return null;
+    }
+
+};
+
+// const add = async (data) => {
+//     const [req, err] = await db.query("INSERT INTO user (email, password, role) VALUES (?,?, ?)", [data.email, data.password, data.role]);
+//     if (!req) {
+//         return null;
+//     }
+//     // Une fois un user ajouté en base, on appelle la fonction getById, créée plus haut, qui permet d'aller
+//     // récupérer en base le user nouvellement créé, sans réécrire la fonction "SELECT * FROM users"
+// };
+
 const add = async (data) => {
-    const [req, err] = await db.query("INSERT INTO user (email, password, role) VALUES (?,?, ?)", [data.email, data.password, data.role]);
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const [req, err] = await db.query("INSERT INTO user (email, password, role) VALUES (?, ?, ?)", [data.email, hashedPassword, "user"]);
     if (!req) {
         return null;
     }
     // Une fois un user ajouté en base, on appelle la fonction getById, créée plus haut, qui permet d'aller
     // récupérer en base le user nouvellement créé, sans réécrire la fonction "SELECT * FROM users"
+    return getById(req.insertId);
+
 };
+
 
 const update = async (id, data) => {
     // Pour update, on va d'abord chercher en base le user correspondant
@@ -62,6 +100,8 @@ module.exports = {
     getAll,
     add,
     getById,
+    getByEmail,
+    getByEmailAndPassword,
     update, 
     remove 
 };
