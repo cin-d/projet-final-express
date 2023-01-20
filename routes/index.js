@@ -20,6 +20,7 @@ router.use('/actuanimes', actuanimesRoute);
 router.use('/inscription', inscriptionRoute);
 router.use('/connexion', connexionRoute);
 
+
 // J'exporte le router afin de pouvoir faire un require dessus
 // et ainsi pouvoir l'utiliser
 module.exports = router; 

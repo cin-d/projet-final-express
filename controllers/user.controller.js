@@ -1,4 +1,5 @@
 const db = require('../utils/db');
+// fichier qui tient la connexion SQL
 const bcrypt = require('bcrypt');
 
 // Je créé des fonctions async qui appelle la base de données, et renvoie les données.
@@ -41,14 +42,17 @@ const getByEmailAndPassword = async (data) => {
 
 };
 
-// const add = async (data) => {
-//     const [req, err] = await db.query("INSERT INTO user (email, password, role) VALUES (?,?, ?)", [data.email, data.password, data.role]);
-//     if (!req) {
-//         return null;
-//     }
-//     // Une fois un user ajouté en base, on appelle la fonction getById, créée plus haut, qui permet d'aller
-//     // récupérer en base le user nouvellement créé, sans réécrire la fonction "SELECT * FROM users"
-// };
+const addAdmin = async (data) => {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const [req, err] = await db.query("INSERT INTO users (email, password, roles) VALUES (?, ?, ?)", [data.email, data.password, "admin"]);
+    if (!req) {
+        return null;
+    }
+    // Une fois un user ajouté en base, on appelle la fonction getById, créée plus haut, qui permet d'aller
+    // récupérer en base le user nouvellement créé, sans réécrire la fonction "SELECT * FROM users"
+    return getById(req.insertId);
+
+};
 
 const add = async (data) => {
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -99,6 +103,7 @@ const remove = async (id) => {
 module.exports = {
     getAll,
     add,
+    addAdmin,
     getById,
     getByEmail,
     getByEmailAndPassword,
